@@ -7,7 +7,7 @@ function Activities() {
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchResource('activities')
+    fetchResource('/api/activities/')
       .then((data) => setActivities(data))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))

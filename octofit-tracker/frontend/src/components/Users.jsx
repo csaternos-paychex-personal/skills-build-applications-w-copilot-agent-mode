@@ -7,7 +7,7 @@ function Users() {
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchResource('users')
+    fetchResource('/api/users/')
       .then((data) => setUsers(data))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))

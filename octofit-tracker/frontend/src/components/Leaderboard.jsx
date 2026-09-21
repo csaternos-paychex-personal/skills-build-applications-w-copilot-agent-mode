@@ -7,7 +7,7 @@ function Leaderboard() {
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchResource('leaderboard')
+    fetchResource('/api/leaderboard/')
       .then((data) => setLeaders(data.sort((a, b) => (b.points || 0) - (a.points || 0))))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))
