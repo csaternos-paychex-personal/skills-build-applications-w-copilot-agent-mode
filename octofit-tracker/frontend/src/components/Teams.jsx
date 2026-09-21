@@ -1,0 +1,33 @@
+import { useEffect, useState } from 'react'
+import { fetchResource } from '../api.js'
+import { ResourceState } from './ResourceState.jsx'
+
+const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+const teamsEndpoint = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev/api/teams/`
+  : 'http://localhost:8000/api/teams/'
+
+function Teams() {
+  const [teams, setTeams] = useState([])
+  const [state, setState] = useState({ loading: true, error: '' })
+
+  useEffect(() => {
+    fetchResource(teamsEndpoint)
+      .then((data) => setTeams(data))
+      .catch((error) => setState({ loading: false, error: error.message }))
+      .finally(() => setState((current) => ({ ...current, loading: false })))
+  }, [])
+
+  return (
+    <section className="page-section">
+      <div className="section-heading"><div><p className="eyebrow">Find your people</p><h1>Teams</h1></div><span className="count-badge">{teams.length} squads</span></div>
+      <ResourceState loading={state.loading} error={state.error} emptyMessage="No teams created yet.">
+        <div className="data-grid">
+          {teams.map((team) => <article className="data-card team-card" key={team._id}><div className="card-mark">+</div><div><h2>{team.name}</h2><p>{team.members?.length || 0} members</p></div></article>)}
+        </div>
+      </ResourceState>
+    </section>
+  )
+}
+
+export default Teams
