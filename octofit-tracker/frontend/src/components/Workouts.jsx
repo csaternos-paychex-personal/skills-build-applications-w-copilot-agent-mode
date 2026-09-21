@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react'
 import { fetchResource } from '../api.js'
 import { ResourceState } from './ResourceState.jsx'
 
+const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+const workoutsEndpoint = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev/api/workouts/`
+  : 'http://localhost:8000/api/workouts/'
+
 function Workouts() {
   const [workouts, setWorkouts] = useState([])
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchResource('/api/workouts/')
+    fetchResource(workoutsEndpoint)
       .then((data) => setWorkouts(data))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))

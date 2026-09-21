@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react'
 import { fetchResource } from '../api.js'
 import { ResourceState } from './ResourceState.jsx'
 
+const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+const activitiesEndpoint = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev/api/activities/`
+  : 'http://localhost:8000/api/activities/'
+
 function Activities() {
   const [activities, setActivities] = useState([])
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchResource('/api/activities/')
+    fetchResource(activitiesEndpoint)
       .then((data) => setActivities(data))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))

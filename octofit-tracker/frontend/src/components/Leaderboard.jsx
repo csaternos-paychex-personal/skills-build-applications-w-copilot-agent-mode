@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react'
 import { fetchResource } from '../api.js'
 import { ResourceState } from './ResourceState.jsx'
 
+const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+const leaderboardEndpoint = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev/api/leaderboard/`
+  : 'http://localhost:8000/api/leaderboard/'
+
 function Leaderboard() {
   const [leaders, setLeaders] = useState([])
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchResource('/api/leaderboard/')
+    fetchResource(leaderboardEndpoint)
       .then((data) => setLeaders(data.sort((a, b) => (b.points || 0) - (a.points || 0))))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))
